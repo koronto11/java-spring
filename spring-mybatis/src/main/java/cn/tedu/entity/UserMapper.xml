@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<!-- 对应某一实体类的映射文件，里面是具体的sql语法
+ //Mapper映射器中的方法的方法名，参数列表，返回类型
+  //要与映射文件中的sql的id，parameterType，resultType保持一致 -->
+<mapper namespace="cn.tedu.dao.UserDao">
+   <!-- namespace属性值指向那么对应的映射器DAO接口 -->
+   <select id="findByName" parameterType="String" 
+   resultType="cn.tedu.entity.User">
+   SELECT * FROM cn_user WHERE cn_user_name=#{name}
+   </select>
+</mapper>

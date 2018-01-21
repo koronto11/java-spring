@@ -1,0 +1,60 @@
+<html>
+ <head>
+   <meta http-equiv="content-type" 
+   content="html;charset=utf-8"/>
+   <script type="text/javascript">
+    //匿名函数
+    //作用是使用JSON语法表示一个对象
+    function f1(){
+    	 var obj={"code":"600877","name":"中国嘉陵"};
+    	 //直接访问对象的属性,输出结果是属性的值
+    	 alert(obj.code);
+     }
+    
+    function f2(){
+    	//嵌套数据表示
+    	var obj={"name":"sally","address":{
+    		"city":"beijing",
+    		"street":"长安街",
+    		"room":13
+    	    }
+    	};
+    	alert(obj.address.street);
+    }
+    
+    //使用JSON语法表示一个由对象组成的数组
+    function f3(){
+    	var arr=[{"code":"600877","name":"中国嘉陵"},
+    	         {"code":"600815","name":"中国石油"}];
+        alert(arr[1].code);
+    }
+    
+    //利用ECMAScript的内置对象
+    //来解决将服务端传来的json字符串转换为javascript对象
+    function f4(){
+    	var str='{"code":"600877","name":"中国嘉陵"}';
+    	var obj=JSON.parse(str);
+    	alert(obj.code);
+    	
+    }
+    
+    function f5(){
+    	//字符串的话若是分行显示要用+拼接
+    	//基本语法，不要犯低级错误
+    	//若是直接用json来表示数据格式则不用拼接
+    	var str='[{"code":"600877","name":"中国嘉陵"},'+
+    	          '{"code":"600878","name":"中国电器"}]';
+    	var obj=JSON.parse(str);
+    	alert(obj[1].name);
+    }
+   </script>
+ </head>
+ <body style="font-size:30px">
+    <!-- 执行f1函数 -->
+    <a href="javascript:f1();">press me!</a>
+    <a href="javascript:f2();">press me!</a>
+    <a href="javascript:f3();">press me!</a>
+    <a href="javascript:f4();">press me!</a>
+    <a href="javascript:f5();">press me!</a>
+ </body>
+</html>

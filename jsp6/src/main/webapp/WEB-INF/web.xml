@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <display-name>jsp6</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  
+  <servlet>
+    <servlet-name>findCost</servlet-name>
+    <servlet-class>web.FindCostServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>findCost</servlet-name>
+    <url-pattern>/findCost</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>addCost</servlet-name>
+    <servlet-class>web.AddCostServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addCost</servlet-name>
+    <url-pattern>/addCost</url-pattern>
+  </servlet-mapping>
+  
+  <filter>
+    <filter-name>log</filter-name>
+    <filter-class>web.LogFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>guolv</filter-name>
+    <filter-class>web.GuolvFilter</filter-class>
+  </filter>
+  
+  <!-- Filter的优先级由filte-mapping标签的前后顺序决定 -->
+  <filter-mapping>
+    <filter-name>log</filter-name>
+    <!-- 在此标签内声明Filter可以过滤哪些请求 -->
+    <!-- /*是对所有请求都有效 -->
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>guolv</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <!-- 配置监听器 -->
+  <listener>
+   <listener-class>
+    web.MyListener
+   </listener-class>
+  </listener>
+</web-app>

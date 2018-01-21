@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+	
+	<!-- 组件扫描 -->
+	<context:component-scan base-package="dao">
+	</context:component-scan>
+	
+	<!-- MVC注解扫描 -->
+	<mvc:annotation-driven/>
+	
+	<!-- 配置视图解析器ViewResolver -->
+	<bean id="jspViewResolver" 
+	class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	  <property name="prefix" value="/WEB-INF/"></property>
+	  <property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- properties文件 属于properties的特殊用法
+	直接用util:properties标签来表示这个properties文件
+	id用于spring取值，location为路径，写法是classpath:文件名-->
+	<util:properties id="config" location="classpath:db.properties">
+	</util:properties>
+	
+	<!-- 配置数据库连接池 
+	按照setter方式注入参数,name就是属性名
+	要声明destroy-method，在spring容器关闭时回调close方法
+	id是要getBean这个连接池对象-->
+	<bean id="ds" class="org.apache.commons.dbcp.BasicDataSource"
+	      destroy-method="close">
+	  <!-- 注入spring表达式，目的是不要写死代码，
+	              将配置信息可修改的数据放置在外部文件中，用户也可以修改配置参数 
+	              读取properties文件的数据，底层也是通过get方法来获取这个Key所对应的Value-->
+	  <property name="driverClassName" value="#{config.driver}"/>
+	  <property name="url" value="#{config.url}"/>
+	  <property name="username" value="#{config.username}"/>
+	  <property name="password" value="#{config.password}"/>
+	  <property name="initialSize" value="#{config.initSize}"/>
+	  <property name="maxActive" value="#{config.maxActive}"/>
+	</bean>
+	
+	<!-- 配置SqlSessionFactoryBean
+	spring与mybatis交互技术 -->
+	<bean id="sqlSessionFactory"
+	      class="org.mybatis.spring.SqlSessionFactoryBean">
+	   <!-- 注入连接池 -->
+	   <property name="dataSource" ref="ds"></property>
+	   <!-- 映射文件配置 -->
+	   <property name="mapperLocations"
+	             value="classpath:entity/*.xml"></property>   
+	</bean>
+	
+	<!-- 配置SqlSessionTemplate -->
+	<bean id="sst" class="org.mybatis.spring.SqlSessionTemplate">
+	  <!-- 构造器方式注入 index是下标，ref是SqlSessionFactoryBean的id
+	  因为其底层仍然是要通过SqlSession来完成的 -->
+	  <constructor-arg index="0" ref="sqlSessionFactory">
+	  </constructor-arg>
+	</bean>
+</beans>

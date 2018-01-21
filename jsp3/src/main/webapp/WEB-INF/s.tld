@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+    version="2.1">
+    
+  <description>HS library</description>
+  <display-name>HS</display-name>
+  <tlib-version>3.1</tlib-version>
+  <short-name>s</short-name>
+  <uri>/hs-tags</uri>
+
+  <validator>
+    <description>
+        Provides core validation features for JSTL tags.
+    </description>
+    <validator-class>
+        org.apache.taglibs.standard.tlv.JstlCoreTLV
+    </validator-class>
+  </validator>
+
+<!-- 通过short-name.name就可以使用这个自定义标签
+<s:sysdate> --> 
+
+<tag>
+  <description>
+        这是一个自定义标签,用于输出系统时间，而且还可以
+        指定时间格式。
+  </description>
+  <name>sysdate</name>
+  <tag-class>web.SysdateTag</tag-class>
+  <!-- 声明标签可以包含的内容 -->
+  <!-- 若是有单标签，则声明body-content -->
+  <body-content>empty</body-content>
+  <!-- 若是有额外属性，则声明attribute标签 -->
+  <attribute>
+    <description>
+            通过属性设置时间格式
+    </description>
+    <!-- 此处设置的是Bean属性，tomcat通过set赋值
+    Bean属性本质就是找get/set方法，一般与对象属性一致 -->
+    <name>format</name>
+    <!-- 该属性是否必须要设置，若true则一定要设置这个属性，若false则不设置也行 -->
+    <required>false</required>
+    <!-- 是否允许使用EL表达式为该属性赋值,true则允许 -->
+    <rtexprvalue>true</rtexprvalue>
+    <!--属性类型  -->
+    <type>java.lang.String</type>
+  </attribute>
+</tag>
+</taglib>

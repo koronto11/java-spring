@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="dao.EmpDAO">
+   <!-- 插入一条实体类数据 一般是对应那个实体类的映射文件
+   #{实体类属性} -->
+   <insert id="save" 
+   parameterType="entity.Emp">
+     INSERT INTO emplist 
+     VALUES(emplist_seq.nextval,#{name},#{age})
+   </insert>
+   
+   <!-- 查询表信息 
+   -->
+   <select id="findAll" 
+   resultType="entity.Emp">
+   SELECT * FROM emplist
+   </select>
+   
+   <!-- 条件查询 根据id查找，所以传入参数是int类型
+   完整写法是java.lang.Integer,但是通常基础类型写成简写即可
+   因为这个参数不是对象而是类型，所以#{写什么名都可以只要是int型}-->
+   <select id="findById" 
+   parameterType="int"
+   resultType="entity.Emp">
+   SELECT * FROM emplist WHERE id=#{id1}
+   </select>
+
+  <!-- 修改数据 
+  要修改的参数#{}中都是那个Emp实体类中的属性值
+  必须要保持一致-->
+  <update id="modify" 
+  parameterType="entity.Emp">
+  UPDATE emplist SET name=#{name},age=#{age} 
+  WHERE id=#{id}
+  </update>
+  
+  
+  <!-- 删除数据 根据id删除-->
+  <delete id="delete" 
+  parameterType="int">
+  DELETE FROM emplist WHERE id=#{id1}
+  </delete>
+  
+  <!-- 获取中间结果Map 
+  在resultType值中就不要写实体类了，写map即可
+  key就是表的字段名，value就是值
+  有多少条记录就有多少个map-->
+  <select id="findById2" 
+  parameterType="int"
+  resultType="map">
+  SELECT * FROM emplist WHERE id=#{id}
+  </select>
+  
+  
+  <!-- 使用ResultMap来解决实体类的属性名和表的字段名
+  不匹配的情况 -->
+  <select id="findById3"
+  parameterType="int"
+  resultMap="emp2Map">
+  SELECT * FROM emplist WHERE id=#{id1}
+  </select>
+  
+  <!-- 结果映射，主要是告诉mybatis如何处理字段名和属性名的对应关系
+  每个resultMap对应一张表和一个实体类，表示其中的对应关系 -->
+  <resultMap type="entity.Emp2" id="emp2Map">
+    <!-- 在里面要把这些不相同的都列出来 -->
+    <result property="ename" column="name"/>
+    <result property="empNo" column="id"/>
+  </resultMap>
+</mapper>

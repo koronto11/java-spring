@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+	
+	<!-- 读取properties文件 
+	id是为了让容器根据getBean方法找到，获取这个Properties对象
+	location是指向这个properties文件位置
+	classpath是spring的内部规定，指按照类路径来寻找文件-->
+	<util:properties id="config" 
+	location="classpath:config.properties"/>
+	
+	<!-- 给SpelBean属性赋值 -->
+	<bean id="sp1" class="value.SpelBean">
+	  <property name="name" value="xiye"/>
+	  <property name="city" value="957"/>
+	  <property name="score" value="100"/>
+	  <property name="pagesize" value="mystic"/>
+	</bean>
+	
+	<!-- 读取bean对象数据  读取上面那个bean对象(id="sp1")的数据
+	其底层原理是根据get方法来获取数据 -->
+	<bean id="read" class="value.SpelBean">
+	  <property name="name" value="#{sp1.name}"/>
+	  <property name="city" value="#{sp1.city}"/>
+	  <property name="score" value="#{sp1.score}"/>
+	  <property name="pagesize" value="#{sp1.pagesize}"/>
+	</bean>
+</beans>

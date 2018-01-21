@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+	
+	
+	<!-- 组件扫描 -->
+	<context:component-scan base-package="dao">
+	</context:component-scan>
+	
+	<!-- MVC注解扫描 -->
+	<mvc:annotation-driven/>
+	
+	<!-- 配置数据库连接参数及连接池 -->
+	<bean id="dbcp" class="org.apache.commons.dbcp.BasicDataSource" 
+	      destroy-method="close">
+	      <!-- 注入spring表达式，目的是不要写死代码，
+	              将配置信息可修改的数据放置在外部文件中，用户也可以修改配置参数 
+	              读取properties文件的数据，底层也是通过get方法来获取这个Key所对应的Value-->
+	  <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+	  <property name="url" value="jdbc:mysql:///cloud_note"/>
+	  <property name="username" value="root"/>
+	  <property name="password" value="294823013"/>
+	</bean>
+	<!-- 配置SqlSessionFactory 用于找响应的mapper映射文件-->
+	<bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean">
+	   <!-- 在这个SqlSessionFactory中要声明两个组件，一个是连接池一个是mapper映射文件 -->
+	   <property name="dataSource" ref="dbcp"></property>
+	   <!-- 千万记住配置mapper映射文件位置的时候要注意用/代替.号，不然会搜索不到这个mapper映射文件 -->
+	   <property name="mapperLocations" value="classpath:cn/tedu/entity/*.xml"></property>
+	</bean>
+	
+	<!-- 配置mapper扫描  指定一个包，包下的mapper映射文件都会被扫描到-->
+	<bean id="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer"> 
+	  <property name="basePackage" value="cn.tedu.dao"></property>
+	  
+	</bean>
+</beans>
